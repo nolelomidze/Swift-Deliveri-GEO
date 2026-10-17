@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="ka" data-theme="dark"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>მიწოდების სისტემა</title>
+<style>
+:root{color-scheme:dark;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#0a0a0b;--g1:#131315;--g2:#1c1c1f;--g3:#28282c;--bd:rgba(255,255,255,.075);--sep:rgba(255,255,255,.075);--tx:#f5f5f7;--mu:#86868b;--ac:#2997ff;--pri:#f5f5f7;--ok:#3ecf8e;--bad:#f4695f;--wa:#f0a843;--r:16px}
+html{scroll-padding-top:env(safe-area-inset-top,0px);background:var(--bg)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+body{margin:0 auto;background:var(--bg);color:var(--tx);font:16px/1.4 -apple-system,BlinkMacSystemFont,"SF Pro Text","Noto Sans Georgian","Segoe UI",system-ui,sans-serif;padding:6px 18px 112px;max-width:560px;-webkit-font-smoothing:antialiased;font-variant-numeric:tabular-nums}
+h1{font-size:28px;font-weight:700;letter-spacing:-.035em;margin:0}
+h2{font-size:12.5px;font-weight:500;color:var(--mu);letter-spacing:.01em;margin:26px 4px 9px}
+.hdr{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:10px 0 18px}.hb{display:flex;gap:8px}
+.ib{width:36px;height:36px;min-height:0;border-radius:50%;padding:0;background:rgba(255,255,255,.07);color:var(--tx);display:flex;align-items:center;justify-content:center;flex:0 0 auto}
+.card{background:var(--g1);border:1px solid var(--bd);border-radius:var(--r);padding:16px;margin-bottom:12px}
+.grp{background:var(--g1);border:1px solid var(--bd);border-radius:var(--r);overflow:hidden;margin-bottom:12px}.grp>.li{padding:14px 16px;border-top:1px solid var(--bd)}.grp>.li:first-child{border-top:0}
+input,select,button{font:inherit;font-size:16px;border:0;border-radius:12px;padding:13px 14px;background:var(--g2);color:var(--tx);max-width:100%;min-width:0}
+input::placeholder{color:var(--mu)}input:focus,select:focus{outline:0;box-shadow:0 0 0 1.5px rgba(41,151,255,.55)}
+button{background:var(--pri);color:#0a0a0b;font-weight:600;cursor:pointer;min-height:46px;letter-spacing:-.01em;transition:opacity .15s,transform .15s}
+button.g{background:var(--g2);color:var(--tx)}button.on{background:var(--g3);color:var(--tx)}button.ok{background:var(--pri);color:#0a0a0b}button.bad{background:var(--bad);color:#fff}
+button.sm{padding:8px 14px;font-size:14px;min-height:36px;border-radius:10px}button.big{padding:15px;font-size:17px;min-height:52px;border-radius:14px}button:active{opacity:.6;transform:scale(.985)}
+.row{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-top:10px}.row:first-child{margin-top:0}.row>*{flex:1 1 120px}
+.mu{color:var(--mu);font-size:13px}.top{display:flex;justify-content:space-between;align-items:center;gap:8px}.top>*{flex:0 0 auto}.top>b{flex:1 1 auto;min-width:0}
+.hero{background:var(--g1);border:1px solid var(--bd);border-radius:20px;padding:20px;margin-bottom:12px}.hero b{display:block;font-size:44px;font-weight:600;letter-spacing:-.035em;margin:4px 0 2px;line-height:1.05}
+.stats{display:flex;gap:8px;margin-bottom:12px}.stats>div{flex:1;background:var(--g1);border:1px solid var(--bd);border-radius:14px;padding:12px 13px;min-width:0}.stats .mu{font-size:12px}.stats b{display:block;font-size:18px;font-weight:600;margin-top:3px;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.tag{--c:var(--mu);display:inline-flex;align-items:center;gap:6px;font-size:13px;font-weight:500;color:var(--mu);background:none;padding:0}.tag::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--c)}
+.s1{--c:var(--ac)}.s2{--c:var(--wa)}.s3{--c:var(--ok)}.s4,.s5{--c:var(--bad)}
+.amt{font-weight:600;font-size:17px;letter-spacing:-.02em}.amt.ok{color:var(--ok)}.amt.bad{color:var(--bad)}
+.item{cursor:pointer}.chev{color:var(--mu);font-size:22px;line-height:1;transition:transform .2s}.chev.o{transform:rotate(90deg)}
+.lk{display:flex;flex-direction:column;gap:8px;margin:10px 0}a{color:var(--ac);font-weight:500;text-decoration:none}.lk a{display:inline-flex;align-items:center;gap:8px}
+.money{background:var(--g2);border-radius:12px;padding:12px 14px;margin:10px 0;font-size:14px;line-height:1.65}.money input,.money select{background:var(--bg)}
+.chips{display:flex;gap:6px;overflow-x:auto;margin:0 0 12px;padding-bottom:2px;scrollbar-width:none}.chips::-webkit-scrollbar{display:none}.chips button{flex:0 0 auto;background:transparent;color:var(--mu);border-radius:9px;padding:7px 13px;font-size:14px;font-weight:500;min-height:0;border:1px solid var(--bd)}.chips button.on{background:var(--g3);color:var(--tx);border-color:transparent}.chips button.g{background:transparent;color:var(--mu)}
+.seg{display:flex;background:var(--g1);border:1px solid var(--bd);border-radius:11px;padding:3px;gap:2px;margin-bottom:14px}.seg button{flex:1;background:none;color:var(--mu);border-radius:8px;min-height:34px;padding:6px 8px;font-size:14px;font-weight:500}.seg button.on{background:var(--g3);color:var(--tx);box-shadow:0 1px 3px rgba(0,0,0,.45)}.seg button.g{background:none;color:var(--mu)}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:14px}td,th{padding:9px 6px;border-bottom:1px solid var(--bd);text-align:left;white-space:nowrap}th{color:var(--mu);font-weight:500;font-size:12px}
+summary{cursor:pointer;color:var(--mu);padding:8px 0;font-size:14px}
+.logo{width:72px;height:72px;border-radius:20px;background:var(--g1);border:1px solid var(--bd);color:var(--tx);display:inline-flex;align-items:center;justify-content:center;box-shadow:0 12px 32px rgba(0,0,0,.5)}
+/* კურიერის ორდერის ბარათი */
+.ord{padding:16px 16px 14px}.oh{display:flex;align-items:center;gap:12px}
+.pos{flex:0 0 auto;width:26px;height:26px;border-radius:50%;border:1px solid var(--bd);color:var(--mu);font-weight:600;font-size:12px;display:flex;align-items:center;justify-content:center}
+.nm{flex:1;min-width:0;display:flex;flex-direction:column}.nm b{font-size:17px;font-weight:600;letter-spacing:-.02em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.oa{text-align:right;font-size:22px;font-weight:600;letter-spacing:-.035em;line-height:1.1}.oa .mu{display:block;font-size:12px;font-weight:500;margin-top:3px;letter-spacing:0}
+.addr{display:flex;align-items:center;gap:12px;margin:14px 0;padding:14px 2px;border-top:1px solid var(--bd);border-bottom:1px solid var(--bd);color:var(--tx);font-size:20px;font-weight:600;line-height:1.25;letter-spacing:-.02em}
+.addr svg:first-child{flex:0 0 auto;color:var(--mu)}.addr span{flex:1;min-width:0;overflow-wrap:anywhere}.addr svg:last-child{flex:0 0 auto;color:var(--mu)}
+.acts{display:flex;gap:8px}.acts>*{min-height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:600;font-size:16px;padding:0 8px;letter-spacing:-.01em}
+.cb{flex:1;background:var(--g2);color:var(--tx)}.cb svg{color:var(--ok)}.cb.off{color:var(--mu)}.cb.off svg{color:var(--mu)}.b2{flex:1;background:var(--g2);color:var(--tx)}.b1{flex:1.35;background:var(--pri);color:#0a0a0b}
+.of{display:flex;justify-content:space-between;align-items:center;margin-top:12px}
+.lnk{background:none;color:var(--bad);font-size:14px;font-weight:500;padding:6px 0;min-height:0}
+.ord.done{padding:13px 16px;opacity:.72}.ord.done .nm b{font-size:16px}.ord.done .nm .mu{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.ord.done .oa{font-size:17px}.ord.done .of{margin-top:8px}
+@keyframes jig{0%{transform:rotate(-.6deg)}50%{transform:rotate(.6deg)}100%{transform:rotate(-.6deg)}}
+.card[data-id]{-webkit-user-select:none;user-select:none;-webkit-touch-callout:none}
+.jig .card[data-act="1"]{animation:jig .3s infinite ease-in-out;touch-action:none}.jig .card[data-act="1"]:nth-child(even){animation-delay:-.15s}
+.jig .card.drag{animation:none;position:relative;z-index:3;box-shadow:0 1px 0 rgba(255,255,255,.05) inset,0 18px 40px rgba(0,0,0,.6);transition:none}
+/* კალენდარი */
+.cm{display:flex;justify-content:space-between;align-items:center;margin:2px 2px 12px}.cm b{font-size:17px;font-weight:600;letter-spacing:-.02em}.cm .hb button{width:32px;height:32px;min-height:0;padding:0;border-radius:50%;background:rgba(255,255,255,.07);color:var(--tx);display:flex;align-items:center;justify-content:center}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}.cw{text-align:center;font-size:11px;color:var(--mu);padding-bottom:4px}
+.cd{aspect-ratio:1/1.12;border-radius:10px;background:transparent;color:var(--tx);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;min-height:0;padding:0;font-size:15px;font-weight:500;border:1px solid transparent}
+.cd i{font-style:normal;font-size:10px;color:var(--mu);font-weight:500;height:12px;line-height:12px}.cd.has i{color:var(--tx)}.cd.sel{border-color:var(--tx)}.cd.td span{color:var(--ac)}
+/* დადასტურების ფანჯარა */
+@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes up{from{transform:translateY(60px);opacity:0}to{transform:none;opacity:1}}
+.ov{position:fixed;left:0;right:0;top:0;bottom:0;background:rgba(0,0,0,.6);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);z-index:20;display:flex;align-items:flex-end;justify-content:center;animation:fade .2s}
+.sheet{width:100%;max-width:560px;background:var(--g1);border:1px solid var(--bd);border-bottom:0;border-radius:24px 24px 0 0;padding:10px 20px calc(env(safe-area-inset-bottom,0px) + 20px);animation:up .3s cubic-bezier(.2,.9,.3,1);text-align:center;box-shadow:0 -20px 60px rgba(0,0,0,.5)}
+.grab{width:36px;height:4px;border-radius:2px;background:var(--g3);margin:0 auto 18px}
+.sheet h3{margin:6px 0 2px;font-size:20px;font-weight:600;letter-spacing:-.025em}.sheet .amtbig{font-size:50px;font-weight:600;letter-spacing:-.04em;margin:4px 0 8px;color:var(--wa)}.sheet button{width:100%;display:block}
+.bn{position:fixed;left:0;right:0;bottom:0;display:flex;justify-content:space-around;padding:8px 6px calc(env(safe-area-inset-bottom,0px) + 6px);background:rgba(16,16,18,.72);-webkit-backdrop-filter:blur(30px) saturate(1.8);backdrop-filter:blur(30px) saturate(1.8);border-top:1px solid var(--bd);z-index:5}
+.bn button{background:none;color:var(--mu);flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10.5px;font-weight:500;padding:4px 2px;min-height:0;border-radius:8px}.bn button i{display:block;line-height:0}.bn button.on{background:none;color:var(--tx)}
+#toast{position:fixed;left:16px;right:16px;top:calc(env(safe-area-inset-top,0px) + 8px);max-width:528px;margin:auto;background:rgba(36,36,40,.9);border:1px solid var(--bd);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);color:var(--tx);padding:13px 16px;border-radius:16px;display:none;z-index:30;box-shadow:0 12px 40px rgba(0,0,0,.55);font-size:15px}
+.sheet textarea{display:block;width:100%;background:var(--g2);color:var(--tx);border:0;border-radius:12px;padding:13px 14px;font:inherit;font-size:16px;min-height:88px;resize:none;margin:14px 0}.sheet textarea:focus{outline:0;box-shadow:0 0 0 1.5px rgba(41,151,255,.55)}
+.sheet .rs{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;margin-top:16px}.sheet .rs button{width:auto;display:inline-block;min-height:0;padding:9px 14px;font-size:14px;border-radius:10px;background:var(--g2);color:var(--mu);font-weight:500}.sheet .rs button.on{background:var(--g3);color:var(--tx);box-shadow:inset 0 0 0 1px rgba(255,255,255,.28)}
+</style></head><body>
+<div id="toast"></div><div id="app"></div>
+<script>
+const K="dl2",CP=[3.5,4,4.5,5,5.5,6,8],ST=["ახალი","მიმაგრებული","გზაში","ჩაბარებული","გაუქმებული","დაბრუნებული"];
+const SEED={z:[{id:1,n:"ქალაქი",pp:6,cp:4},{id:2,n:"შემოგარენი",pp:8,cp:5.5}],zid:3,ap:"0000",c:[{id:1,n:"გიორგი",ph:"555111111",pin:"1111",on:1},{id:2,n:"ნიკა",ph:"555222222",pin:"2222",on:1}],p:[{id:1,n:"კომპანია A",ph:"",fp:"პარტნიორი",on:1},{id:2,n:"კომპანია B",ph:"",fp:"მიმღები",on:1}],o:[],n:[],id:1,nid:1,cid:3,pid:3};
+let S=SEED,me=null,tab="o",seen=0,PC=0;
+const F0={cid:"",st:"",ty:"",pid:"",from:"",to:"",q:"",v:"t"};let F={...F0},EX={},NF=0,ED=0,DUP="",U={};
+try{S=JSON.parse(localStorage.getItem(K))||SEED}catch(e){}
+try{me=JSON.parse(sessionStorage.getItem("dlme"))}catch(e){}
+if(!S.z){S.z=[{id:1,n:"ქალაქი",pp:6,cp:4},{id:2,n:"შემოგარენი",pp:8,cp:5.5}];S.zid=3}
+S.o.forEach(o=>{if(o.st===2)o.st=1});
+seen=S.nid;
+const save=()=>{try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}};
+const $=s=>document.querySelector(s),L=n=>(+n||0).toFixed(2)+" ₾",sum=(a,f)=>a.reduce((s,o)=>s+f(o),0);
+const esc=s=>String(s==null?"":s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const C=id=>S.c.find(x=>x.id===id)||{n:"—"},Pt=id=>S.p.find(x=>x.id===id)||{n:"—"},V=id=>$("#"+id).value.trim();
+/* ტარიფები: პარტნიორის ფასი (ამანათზე) და კურიერის ანაზღაურება. ინდივიდუალური ტარიფი (t) აქარწყლებს საერთოს */
+const zById=id=>S.z.find(z=>z.id===id),zidOf=o=>o.zid||(S.z.find(z=>z.n===o.z)||{}).id;
+const pRate=(pid,zid)=>{const z=zById(zid);if(!z)return 0;const p=Pt(pid);return p.t&&p.t[zid]!=null?p.t[zid]:z.pp};
+const cRate=(cid,zid)=>{const z=zById(zid);if(!z)return 0;const c=C(cid);return c.t&&c.t[zid]!=null?c.t[zid]:z.cp};
+const zOpts=(pid,sel)=>S.z.map(z=>`<option value="${z.id}" ${z.id===sel?"selected":""}>${esc(z.n)} · ${pRate(pid,z.id)} ₾</option>`).join("");
+function refZ(){const v=+$("#zn").value;$("#zn").innerHTML=zOpts(+$("#pt").value,v)}
+function setZ(id,k,v){const z=zById(id);if(k==="n")z.n=v.trim()||z.n;else z[k]=+v||0;save();R()}
+function addZ(){const n=V("znn");if(!n){toast("ჩაწერე ზონის სახელი");return}S.z.push({id:S.zid++,n,pp:+V("znp")||0,cp:+V("znc")||0});save();R()}
+function setT(k,id,zid,v){const x=S[k].find(y=>y.id===id);x.t=x.t||{};if(v.trim()==="")delete x.t[zid];else x.t[zid]=+v;save();toast("ტარიფი შეინახა")}
+function tariffCard(){return`<div class="card"><b>ტარიფები</b><div class="mu" style="margin:4px 0 8px">საერთო ტარიფი ყველა პარტნიორზე და კურიერზე. ინდივიდუალურს ცალკე აყენებ: კომპანიების და კურიერების „დეტალებში“.</div>
+ <div class="row mu"><span style="flex:1 1 110px">ზონა</span><span style="flex:0 0 88px">პარტნიორი იხდის</span><span style="flex:0 0 88px">კურიერს</span></div>`+
+ S.z.map(z=>`<div class="row"><input value="${esc(z.n)}" onchange="setZ(${z.id},'n',this.value)" style="flex:1 1 110px"><input type="number" step="0.5" value="${z.pp}" onchange="setZ(${z.id},'pp',this.value)" style="flex:0 0 88px"><input type="number" step="0.5" value="${z.cp}" onchange="setZ(${z.id},'cp',this.value)" style="flex:0 0 88px"></div>`).join("")+
+ `<div class="mu" style="margin-top:12px">ახალი ზონა</div><div class="row"><input id="znn" placeholder="სახელი" style="flex:1 1 110px"><input id="znp" type="number" step="0.5" placeholder="პარტნ." style="flex:0 0 88px"><input id="znc" type="number" step="0.5" placeholder="კურიერს" style="flex:0 0 88px"></div><div class="row"><button class="g sm" onclick="addZ()">＋ ზონის დამატება</button></div>
+ <div class="mu" style="margin-top:10px">პარტნიორის ტარიფი ფიქსირდება ორდერის შექმნისას, კურიერის ანაზღაურება ჩაბარებისას. უკვე ჩაბარებული ორდერები არ იცვლება.</div></div>`}
+const myKey=()=>me&&me.r==="a"?"a":me&&me.id;
+/* აკრეფილი = COD + (მიმღები იხდის მიწოდებას ? მიწოდება : 0); პარტნიორს ეკუთვნის = COD − (პარტნიორი იხდის ? მიწოდება : 0) */
+const coll=o=>o.a+(o.fp==="მიმღები"?o.f:0),owed=o=>o.a-(o.fp==="პარტნიორი"?o.f:0);
+/* თარიღის ფილტრი */
+const iso=d=>d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0");
+/* სამუშაო დღე იწყება 01:00-ზე */
+const bizDay=ts=>iso(new Date(ts-3600000)),today=()=>bizDay(Date.now());
+const inR=ts=>{const k=bizDay(ts);if(F.from&&k<F.from)return false;if(F.to&&k>F.to)return false;return true};
+function fs(k,v){F[k]=v;R()}
+function fm(v){if(!v)return;const[y,m]=v.split("-");F.from=v+"-01";F.to=v+"-"+String(new Date(+y,+m,0).getDate()).padStart(2,"0");R()}
+function fq(t){if(t==="d")F.from=F.to=today();else if(t==="m")fm(today().slice(0,7));else{F.from=F.to=""}R()}
+function fr(){F={...F0};R()}
+function toast(m){const t=$("#toast");t.textContent=m;t.style.display="block";setTimeout(()=>t.style.display="none",3500);
+ try{if(Notification.permission==="granted")new Notification("მიწოდება",{body:m})}catch(e){}}
+function askN(){try{Notification.requestPermission().then(p=>toast(p==="granted"?"შეტყობინებები ჩაირთო":"შეტყობინებები დაბლოკილია"))}catch(e){toast("ბრაუზერი არ უჭერს მხარს")}}
+function note(to,m){S.n.unshift({id:S.nid++,to,m,t:new Date().toLocaleTimeString("ka",{hour:"2-digit",minute:"2-digit"})});S.n=S.n.slice(0,60)}
+window.addEventListener("storage",e=>{if(e.key!==K||!e.newValue)return;try{S=JSON.parse(e.newValue)}catch(x){return}
+ S.n.filter(n=>n.id>=seen&&n.to===myKey()).reverse().forEach(n=>toast(n.m));seen=S.nid;R()});
+function login(){const u=$("#lu").value,pin=V("lp");
+ if(u==="a"?pin===S.ap:C(+u).pin===pin){me=u==="a"?{r:"a"}:{r:"c",id:+u};try{sessionStorage.setItem("dlme",JSON.stringify(me))}catch(e){}R()}else toast("არასწორი PIN")}
+function out(){me=null;try{sessionStorage.removeItem("dlme")}catch(e){}R()}
+function tb(t){tab=t;R()}function ex(id){EX[id]=!EX[id];drawList()}function nf(){NF=!NF;R()}function sq(v){F.q=v;drawList()}function sst(v){F.st=v;drawList()}function drawList(){const l=$("#lst");if(l)l.innerHTML=olist()}
+function goC(id){F={...F0,cid:String(id),v:"a"};tab="o";R()}
+/* რეგისტრაცია */
+function addC(){const n=V("cn"),ph=V("cph"),pin=V("cpn");if(!n||!/^\d{4}$/.test(pin)){toast("შეავსე სახელი და 4-ციფრიანი PIN");return}
+ S.c.push({id:S.cid++,n,ph,pin,on:1});U.nc=0;save();R();toast("კურიერი დაემატა: "+n)}
+function addP(){const n=V("pn");if(!n){toast("ჩაწერე კომპანიის სახელი");return}
+ S.p.push({id:S.pid++,n,ph:V("pph"),fp:$("#pfp").value,on:1});U.np2=0;save();R();toast("პარტნიორი დაემატა: "+n)}
+function tog(k,id){const x=S[k].find(y=>y.id===id);x.on=x.on?0:1;save();R()}
+function setAp(){const p=V("nap");if(!/^\d{4}$/.test(p)){toast("PIN უნდა იყოს 4 ციფრი");return}S.ap=p;save();toast("ადმინის PIN შეიცვალა")}
+/* შეკვეთები (ანაზღაურება აქ არ ინიშნება) */
+const who=()=>me?(me.r==="a"?"ადმინი":C(me.id).n):"";
+function hist(o,m){o.h=(o.h||[]).concat({t:Date.now(),u:who(),m}).slice(-20)}
+function fillPh(v){v=v.trim();if(!v)return;const o=S.o.slice().reverse().find(x=>x.ph===v);if(!o)return;$("#cl").value=o.cl;$("#ad").value=o.ad;if(o.zid)$("#zn").value=o.zid;toast("მონაცემები შეივსო წინა ორდერიდან")}
+function add(){const pid=+$("#pt").value,p=Pt(pid),a=+V("am")||0,zid=+$("#zn").value,ph=V("ph"),ad=V("ad");
+ if(!pid||!V("cl")||!ad||!zById(zid)){toast("აირჩიე პარტნიორი და შეავსე მიმღები, მისამართი");return}
+ const dk=ph+"|"+ad;if(ph&&S.o.some(o=>o.ph===ph&&o.ad===ad&&o.st<3)&&DUP!==dk){DUP=dk;toast("ასეთი აქტიური ორდერი უკვე არსებობს. თუ მაინც გინდა, დააჭირე ისევ „დამატებას“");return}
+ DUP="";const o={id:S.id++,d:Date.now(),cl:V("cl"),ph,ad,zid,z:zById(zid)?zById(zid).n:"",pid,a,f:pRate(pid,zid),fp:p.fp,ref:V("rf"),cp:0,st:0,cid:0,h:[]};
+ hist(o,"შეიქმნა");S.o.push(o);note("a",`ახალი შეკვეთა #${o.id} · ${p.n}`);NF=0;save();R();toast("შეკვეთა დაემატა")}
+function setC(i,cid){const o=S.o[i];if(o.st===3){toast("ჩაბარებულ ორდერზე კურიერს ვერ შეცვლი");R();return}
+ o.cid=+cid;if(o.cid&&o.st<1)o.st=1;if(!o.cid&&o.st===1)o.st=0;hist(o,o.cid?"მიემაგრა: "+C(o.cid).n:"კურიერი მოეხსნა");
+ if(o.cid)note(o.cid,`ახალი შეკვეთა #${o.id} (${Pt(o.pid).n}): ${o.ad} · ${coll(o)>0?"აკრიფე "+L(coll(o)):"თანხის აკრეფა არ არის"}`);save();R();if(o.cid)toast("შეტყობინება გაეგზავნა: "+C(o.cid).n)}
+/* ჩაბარებულად მხოლოდ კურიერი ნიშნავს; მხოლოდ მაშინ აღირიცხება ორდერი და თანხები */
+function setS(i,s){const o=S.o[i],n=+s,adm=me&&me.r==="a";
+ if(!adm&&(o.cid!==me.id||![3,5].includes(n)||o.st===3))return;
+ if(adm&&n===3&&o.st!==3){toast("ჩაბარებულად მხოლოდ კურიერი ნიშნავს");R();return}
+ if(o.st===3&&n!==3){if(o.set||o.ps){toast("ანგარიშსწორებული ორდერი ვერ გაიხსნება");R();return}delete o.dd}
+ if(n===3&&o.st!==3){o.dd=Date.now();const r=cRate(o.cid,zidOf(o));if(r)o.cp=r}
+ if(o.st===5&&n!==5)delete o.rs;o.st=n;hist(o,"სტატუსი: "+ST[n]);
+ if(adm){if(o.cid)note(o.cid,`#${o.id} → ${ST[n]}`)}else note("a",`#${o.id}${o.ref?" ("+o.ref+")":""} → ${ST[n]} (${C(o.cid).n})`);
+ save();R();if(n===3&&!adm)toast("ორდერი აღირიცხა")}
+function ed(id){ED=ED===id?0:id;EX[id]=1;drawList()}
+function saveE(i){const o=S.o[i],g=id=>$("#"+id).value.trim(),lock=o.st===3,ch=[];
+ if(!g("ecl")||!g("ead")){toast("მიმღები და მისამართი სავალდებულოა");return}
+ const set=(k,v,l)=>{if((o[k]===undefined?"":o[k])!==v){ch.push(l);o[k]=v}};
+ set("cl",g("ecl"),"მიმღები");set("ph",g("eph"),"ტელეფონი");set("ad",g("ead"),"მისამართი");set("ref",g("erf"),"კოდი");
+ if(!lock){set("pid",+g("ep"),"კომპანია");{const zid=+g("ez");if(zid&&zid!==o.zid){o.zid=zid;o.z=zById(zid).n;ch.push("ზონა")}}set("fp",g("efp"),"მიწოდებას იხდის");set("a",+g("ea")||0,"COD");set("f",+g("ef")||0,"მიწოდება");
+  const cid=+g("ec");if(cid!==o.cid){o.cid=cid;if(cid&&o.st<1)o.st=1;if(!cid&&o.st===1)o.st=0;ch.push("კურიერი → "+(cid?C(cid).n:"—"))}}
+ if(ch.length){hist(o,"შეიცვალა: "+ch.join(", "));if(o.cid)note(o.cid,`#${o.id} შეიცვალა: ${ch.join(", ")} · ${coll(o)>0?"აკრიფე "+L(coll(o)):"თანხის აკრეფა არ არის"}`)}
+ ED=0;save();R();toast(ch.length?"ორდერი განახლდა":"ცვლილება არ არის")}
+function fv(v){F.v=v;drawList()}function tg(k){U[k]=!U[k];R();if(k==="stg")scrollTo(0,0)}
+/* დღის დახურვა 01:00-ზე: ახალი დღე იწყება, ჩაუბარებელი ორდერები გადმოდის */
+function checkDay(){const t=today();if(S.day===t)return;const first=!S.day;S.day=t;
+ if(!first)note("a",`ახალი დღე (${t.split("-").reverse().join(".")}): გადმოვიდა ${S.o.filter(o=>o.st<3).length} ჩაუბარებელი ორდერი`);save()}
+/* კურიერის ანაზღაურება: ითვლება ცალკე, ჩაბარებულ ამანათებზე */
+function setCP(i,v){S.o[i].cp=+v;save();R()}
+function bulk(){const r=+$("#br").value;S.o.forEach(o=>{if(o.cid===PC&&o.st===3&&!o.set&&!o.cp)o.cp=r});save();R();toast("ანაზღაურება დაყენდა")}
+/* ანგარიშსწორება */
+function payC(id){const x=cst(id);S.o.forEach(o=>{if(o.cid===id&&o.st===3)o.set=1});note(id,`ანგარიშსწორება: ჩააბარე COD ${L(x.cash)}, მიიღე გამომუშავება ${L(x.pay)}`);save();R();toast(`${C(id).n}: COD ${L(x.cash)} მიღებულია, გამომუშავება ${L(x.pay)} გაცემულია`)}
+const dd=o=>o.dd||o.d||0;
+function payP(id){S.o.forEach(o=>{if(o.pid===id&&o.st===3&&inR(dd(o)))o.ps=1});save();R();toast("გადახდა დაფიქსირდა: "+Pt(id).n)}
+function cst(id){const mine=S.o.filter(o=>o.cid===id),all=mine.filter(o=>o.st===3),d=all.filter(o=>!o.set),act=mine.filter(o=>o.st===1||o.st===2),by={};
+ d.forEach(o=>{if(o.a>0)by[o.pid]=(by[o.pid]||0)+o.a});
+ const cash=sum(d,coll),pay=sum(d,o=>o.cp||0),fee=sum(d,o=>o.fp==="მიმღები"?o.f:0);
+ return{n:all.length,cash,pay,fee,by,hand:cash-pay,act:act.length,n1:act.filter(o=>o.st===1).length,n2:act.filter(o=>o.st===2).length,ac:act.filter(o=>o.a>0).length,ap:act.filter(o=>o.a===0).length}}
+function pst(id){const all=S.o.filter(o=>o.pid===id&&o.st===3&&inR(dd(o))),un=all.filter(o=>!o.ps);
+ const c=sum(all,o=>o.a),f=sum(all,o=>o.fp==="პარტნიორი"?o.f:0);
+ return{n:all.length,c,f,net:c-f,paid:sum(all.filter(o=>o.ps),owed),left:sum(un,owed),held:sum(all.filter(o=>!o.set),o=>o.a)}}
+const bk=s=>Object.keys(s.by).map(k=>`${esc(Pt(+k).n)}: ${L(s.by[k])}`).join(" · ")+(s.fee?` · მიწოდება: ${L(s.fee)}`:"");
+function fbar(ord){return`<div class="card"><div class="row">${ord?`<select onchange="fs('cid',this.value)"><option value="">ყველა კურიერი</option><option value="0" ${F.cid==="0"?"selected":""}>კურიერის გარეშე</option>${S.c.map(c=>`<option value="${c.id}" ${F.cid===String(c.id)?"selected":""}>${esc(c.n)}</option>`).join("")}</select>
+ 
+ <select onchange="fs('ty',this.value)"><option value="">COD + გადახდილი</option><option value="c" ${F.ty==="c"?"selected":""}>მხოლოდ COD</option><option value="p" ${F.ty==="p"?"selected":""}>მხოლოდ გადახდილი</option></select>`:""}
+ <select onchange="fs('pid',this.value)"><option value="">ყველა კომპანია</option>${S.p.map(p=>`<option value="${p.id}" ${F.pid===String(p.id)?"selected":""}>${esc(p.n)}</option>`).join("")}</select></div>
+ <div class="row"><input type="date" value="${F.from}" onchange="fs('from',this.value)"><input type="date" value="${F.to}" onchange="fs('to',this.value)"><input type="month" onchange="fm(this.value)"></div>
+ <div class="row"><button class="g" onclick="fq('d')">დღეს</button><button class="g" onclick="fq('m')">ამ თვე</button><button class="g" onclick="fq('')">ყველა დრო</button><button class="g" onclick="fr()">გასუფთავება</button></div></div>`}
+const dayOk=o=>(F.from||F.to)?inR(o.d||0):(F.v!=="t"||bizDay(o.d||0)===today()||o.st<3);
+function ok(o){return(F.cid===""||String(o.cid)===F.cid)&&(F.ty===""||(F.ty==="c"?o.a>0:o.a===0))&&(F.pid===""||String(o.pid)===F.pid)&&dayOk(o)&&(!F.q||[o.id,o.ref,o.cl,o.ph,o.ad,Pt(o.pid).n,C(o.cid).n].join(" ").toLowerCase().includes(F.q.toLowerCase()))}
+function olist(){const base=S.o.map((o,i)=>[o,i]).filter(x=>ok(x[0])),list=base.filter(x=>F.st===""||String(x[0].st)===F.st);
+ const chip=(v,t,n)=>`<button class="${F.st===v?"on":"g"}" onclick="sst('${v}')">${t} ${n}</button>`;
+ return`<div class="seg"><button class="${F.v==="t"?"on":"g"}" onclick="fv('t')">დღეს + გადმოსული</button><button class="${F.v==="a"?"on":"g"}" onclick="fv('a')">ყველა დრო</button></div>
+ <div class="chips">${chip("","ყველა",base.length)}${ST.map((t,k)=>k===2?"":chip(String(k),t,base.filter(x=>x[0].st===k).length)).join("")}</div>`+
+ (list.length?`<div class="grp">${list.slice().reverse().map(x=>card(x[0],x[1],1)).join("")}</div><div class="mu" style="margin:0 4px 10px">გადმოსული: ${list.filter(x=>x[0].st<3&&bizDay(x[0].d||0)!==today()).length} · COD ჯამი: ${L(sum(list,x=>x[0].a))}</div>`:`<div class="card mu">ორდერები არ მოიძებნა</div>`)}
+const tm=t=>new Date(t).toLocaleString("ka",{day:"2-digit",month:"2-digit",hour:"2-digit",minute:"2-digit"});
+function editForm(o,i){const lock=o.st===3,dis=lock?"disabled":"";
+ return`<div class="money"><b>რედაქტირება #${o.id}</b>${lock?`<div class="mu">ჩაბარებულია: თანხები, კომპანია და კურიერი დაბლოკილია. შესაცვლელად ჯერ გახსენი ხელახლა.</div>`:""}
+ <div class="row"><input id="ecl" value="${esc(o.cl)}" placeholder="მიმღები"><input id="eph" value="${esc(o.ph)}" placeholder="ტელეფონი" type="tel"></div>
+ <div class="row"><input id="ead" value="${esc(o.ad)}" placeholder="მისამართი"><select id="ez" ${dis} onchange="$('#ef').value=pRate(+$('#ep').value,+this.value)">${zOpts(o.pid,zidOf(o))}${zidOf(o)?"":`<option value="0" selected>${esc(o.z)}</option>`}</select></div>
+ <div class="row"><select id="ep" ${dis} onchange="$('#efp').value=Pt(+this.value).fp;$('#ef').value=pRate(+this.value,+$('#ez').value)">${S.p.filter(p=>p.on||p.id===o.pid).map(p=>`<option value="${p.id}" ${p.id===o.pid?"selected":""}>${esc(p.n)}</option>`).join("")}</select><select id="efp" ${dis}><option value="პარტნიორი" ${o.fp==="პარტნიორი"?"selected":""}>მიწოდებას იხდის პარტნიორი</option><option value="მიმღები" ${o.fp==="მიმღები"?"selected":""}>მიწოდებას იხდის მიმღები</option></select></div>
+ <div class="row"><input id="ea" type="number" value="${o.a}" ${dis} placeholder="COD ₾"><input id="ef" type="number" step="0.5" value="${o.f}" ${dis} placeholder="მიწოდება ₾"></div>
+ <div class="row"><input id="erf" value="${esc(o.ref)}" placeholder="ორდერის კოდი"></div>
+ <div class="row"><select id="ec" ${dis}><option value="0">კურიერი…</option>${S.c.filter(c=>c.on||c.id===o.cid).map(c=>`<option value="${c.id}" ${c.id===o.cid?"selected":""}>${esc(c.n)}</option>`).join("")}</select></div>
+ <div class="row"><button onclick="saveE(${i})">შენახვა</button><button class="g" onclick="ed(${o.id})">გაუქმება</button>${lock?`<button class="g" onclick="setS(${i},2)">გახსენი ხელახლა</button>`:""}</div></div>`}
+function card(o,i,adm,pos){const open=!adm||EX[o.id],pn=esc(Pt(o.pid).n),cur=o.cid?esc(C(o.cid).n):"კურიერის გარეშე",car=o.st<3&&bizDay(o.d||0)!==today(),lock=o.st===3,cc=coll(o),
+ pill=(car?`<span class="tag s2">გადმოსული</span> `:"")+`<span class="tag s${o.st}">${ST[o.st]}</span>`,
+ amt=cc>0?`<span class="amt">${L(cc)}</span>`:`<span class="amt ok">გადახდილია</span>`,
+ nm=`#${o.id}${o.ref?" · "+esc(o.ref):""} ${esc(o.cl)}`,
+ ph=o.ph?`<a href="tel:${esc(o.ph.replace(/[^\d+]/g,""))}" target="_top" rel="noopener">${sv("phone",16)}${esc(o.ph)}</a>`:"",
+ mp=`<a href="${mapUrl(o)}" target="_blank" rel="noopener">${sv("pin",16)}${esc(o.ad)}</a>`;
+ if(!adm){const nc=cc>0;
+ if(o.st>=3)return`<div class="card ord done" data-id="${o.id}" data-act="0"><div class="oh"><div class="nm"><b>#${o.id} ${esc(o.cl)}</b><span class="mu">${esc(o.ad)} · ${pn}</span></div><div class="oa">${nc?L(cc):"გადახდილია"}</div></div><div class="of"><span class="tag s${o.st}">${ST[o.st]}</span></div></div>`;
+ return`<div class="card ord" data-id="${o.id}" data-act="1"><div class="oh">${pos?`<span class="pos">${pos}</span>`:""}<div class="nm"><b>#${o.id} ${esc(o.cl)}</b><span class="mu">${pn}${o.z?" · "+esc(o.z):""}</span></div><div class="oa">${nc?L(cc):"გადახდილია"}<span class="mu" style="color:var(--${nc?"wa":"ok"})">${nc?"აკრიფე":"ქეში არ გჭირდება"}</span></div></div>
+ <a class="addr" href="${mapUrl(o)}" target="_blank" rel="noopener">${sv("pin",22)}<span>${esc(o.ad)}</span>${sv("chev",18)}</a>
+ <div class="acts">${o.ph?`<a class="cb" href="tel:${esc(o.ph.replace(/[^\d+]/g,""))}" target="_top" rel="noopener" onclick="callTap(${o.id})">${sv("phone",20)}დარეკვა</a>`:`<span class="cb off">${sv("phone",20)}ნომერი არ არის</span>`}<button class="b1" onclick="dv(${i})">ჩაბარება</button></div>
+ <div class="of"><span>${car?`<span class="tag s2">გადმოსული</span> `:""}<span class="tag s${o.st}">${ST[o.st]}</span></span><button class="lnk" onclick="rt(${i})">ვერ ჩაბარდა</button></div></div>`}
+ return`<div class="li"><div class="item" onclick="ex(${o.id})"><div class="top"><b>${nm}</b>${amt}</div><div class="mu">${pn} · ${cur}</div><div class="mu">${esc(o.ad)}</div>${o.st===5&&o.rs?`<div class="mu" style="color:var(--bad)">${esc(o.rs)}</div>`:""}<div class="top" style="margin-top:6px"><span>${pill}</span><span class="chev ${open?"o":""}">›</span></div></div>`+
+ (!open&&!o.cid&&o.st===0?`<div class="row"><select onchange="setC(${i},this.value)"><option value="0">კურიერის არჩევა…</option>${S.c.filter(c=>c.on).map(c=>`<option value="${c.id}">${esc(c.n)}</option>`).join("")}</select></div>`:"")+
+ (open?`<div class="lk">${mp}${ph}</div><div class="mu">${o.z} · ${tm(o.d||0)} · მიწოდება ${L(o.f)} (იხდის: ${o.fp})</div>`+(ED===o.id?editForm(o,i):`${o.rs&&o.st===5?`<div class="money" style="box-shadow:inset 3px 0 0 var(--bad)">ვერ ჩაბარდა<br><b>${esc(o.rs)}</b></div>`:""}<div class="money">${lock?"აღრიცხულია "+tm(o.dd||0)+"<br>":""}კურიერი აკრეფს: <b>${L(cc)}</b><br>პარტნიორს ეკუთვნის: <b>${L(owed(o))}</b><br>ჩვენი შემოსავალი: <b>${L(o.f)}</b>${lock?`<br>კურიერს: <b>${L(o.cp)}</b> · მოგება: <b>${L(o.f-(o.cp||0))}</b>`:""}</div>
+ <div class="row"><select onchange="setC(${i},this.value)"><option value="0">კურიერი…</option>${S.c.filter(c=>c.on||c.id===o.cid).map(c=>`<option value="${c.id}" ${c.id===o.cid?"selected":""}>${esc(c.n)}</option>`).join("")}</select><select onchange="setS(${i},this.value)">${ST.map((t,k)=>k===2||(k===3&&o.st!==3)?"":`<option value="${k}" ${k===o.st?"selected":""}>${t}</option>`).join("")}</select><button class="g" onclick="ed(${o.id})">რედაქტირება</button></div>
+ <details><summary class="mu" style="color:var(--mu)">ისტორია (${(o.h||[]).length})</summary>${(o.h||[]).slice().reverse().map(x=>`<div class="mu">${tm(x.t)} · ${esc(x.u)} · ${esc(x.m)}</div>`).join("")}</details><div class="row"><button class="g sm" style="color:var(--bad)" onclick="dl(${i})">ორდერის წაშლა</button></div>`):"")+`</div>`}
+/* რიგითობის შეცვლა: დიდხანს დაჭერა → ქანაობა → გადაათრიე ზემოთ/ქვემოთ */
+const IC={phone:'<path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>',pin:'<path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/>',chev:'<polyline points="9 18 15 12 9 6"/>',nav:'<polygon points="3 11 22 2 13 21 11 13 3 11"/>',
+ bell:'<path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>',sliders:'<line x1="4" y1="21" x2="4" y2="14"/><line x1="4" y1="10" x2="4" y2="3"/><line x1="12" y1="21" x2="12" y2="12"/><line x1="12" y1="8" x2="12" y2="3"/><line x1="20" y1="21" x2="20" y2="16"/><line x1="20" y1="12" x2="20" y2="3"/><line x1="1" y1="14" x2="7" y2="14"/><line x1="9" y1="8" x2="15" y2="8"/><line x1="17" y1="16" x2="23" y2="16"/>',plus:'<line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/>',power:'<path d="M18.36 6.64a9 9 0 1 1-12.73 0"/><line x1="12" y1="2" x2="12" y2="12"/>',
+ package:'<line x1="16.5" y1="9.4" x2="7.5" y2="4.21"/><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/>',truck:'<rect x="1" y="3" width="15" height="13"/><polygon points="16 8 20 8 23 11 23 16 16 16 16 8"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/>',briefcase:'<rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/>',clock:'<circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>',trend:'<polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/>'},
+ sv=(n,z=20)=>`<svg viewBox="0 0 24 24" width="${z}" height="${z}" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${IC[n]}</svg>`;
+IC.back='<polyline points="15 18 9 12 15 6"/>';
+const p2=n=>String(n).padStart(2,"0"),MN=["იანვარი","თებერვალი","მარტი","აპრილი","მაისი","ივნისი","ივლისი","აგვისტო","სექტემბერი","ოქტომბერი","ნოემბერი","დეკემბერი"],WD=["ორშ","სამ","ოთხ","ხუთ","პარ","შაბ","კვი"],tmT=t=>new Date(t).toLocaleTimeString("ka",{hour:"2-digit",minute:"2-digit"});
+let CAL=(()=>{const t=today().split("-");return{y:+t[0],m:+t[1]-1,sel:today()}})();
+function calNav(d){CAL.m+=d;if(CAL.m<0){CAL.m=11;CAL.y--}if(CAL.m>11){CAL.m=0;CAL.y++}R()}
+function calSel(k){CAL.sel=k;const p=k.split("-");CAL.y=+p[0];CAL.m=+p[1]-1;R()}
+const segE=()=>`<div class="seg"><button class="${U.cv==="e"?"g":"on"}" onclick="U.cv='o';R()">ორდერები</button><button class="${U.cv==="e"?"on":"g"}" onclick="U.cv='e';R()">გამომუშავება</button></div>`;
+/* გამომუშავების კალენდარი: დღეების მიხედვით ჩაბარებული ორდერები და გამომუშავება (დღე იწყება 01:00-ზე) */
+function calView(cid,adm){const y=CAL.y,m=CAL.m,dim=new Date(y,m+1,0).getDate(),off=(new Date(y,m,1).getDay()+6)%7,mk=d=>y+"-"+p2(m+1)+"-"+p2(d),by={};
+ S.o.filter(o=>o.cid===cid&&o.st===3).forEach(o=>{const k=bizDay(dd(o));(by[k]=by[k]||[]).push(o)});
+ const E=k=>by[k]?sum(by[k],o=>o.cp||0):0,days=[];for(let d=1;d<=dim;d++)days.push(mk(d));
+ const mo=days.filter(k=>by[k]),cnt=mo.reduce((a,k)=>a+by[k].length,0),tot=mo.reduce((a,k)=>a+E(k),0),mx=Math.max(1,...mo.map(E));
+ const cells=Array(off).fill("<span></span>").concat(days.map((k,i)=>{const e=E(k),n=by[k]?by[k].length:0;return`<button class="cd ${n?"has":""} ${CAL.sel===k?"sel":""} ${k===today()?"td":""}" style="${n?`background:rgba(41,151,255,${(.1+.3*e/mx).toFixed(2)})`:""}" onclick="calSel('${k}')"><span>${i+1}</span><i>${n?+e.toFixed(1):""}</i></button>`})).join("");
+ const last=[0,1,2,3,4,5,6].map(i=>[bizDay(Date.now()-i*864e5),i]),sel=by[CAL.sel]||[];
+ return(adm?`<div class="top" style="margin-bottom:12px"><b>${esc(C(cid).n)} · გამომუშავება</b><button class="g sm" onclick="U.calc=0;R()">დახურვა</button></div>`:"")+
+ `<div class="stats">${sb(MN[m],cnt+" შეკვეთა")}${sb("გამომუშავება",L(tot))}${sb("საშ. დღეში",L(mo.length?tot/mo.length:0))}</div>
+ <h2>ბოლო დღეები</h2><div class="grp">${last.map(([k,i])=>`<div class="li item" onclick="calSel('${k}')"><div class="top"><b style="font-weight:500">${i===0?"დღეს":i===1?"გუშინ":i===2?"გუშინ წინ":k.split("-").reverse().slice(0,2).join(".")}</b><span class="amt">${L(E(k))}</span></div><div class="mu">${by[k]?by[k].length+" შეკვეთა":"შეკვეთა არ არის"}</div></div>`).join("")}</div>
+ <h2>კალენდარი</h2><div class="card"><div class="cm"><b>${MN[m]} ${y}</b><div class="hb"><button onclick="calNav(-1)">${sv("back",16)}</button><button onclick="calNav(1)">${sv("chev",16)}</button></div></div><div class="cal">${WD.map(w=>`<div class="cw">${w}</div>`).join("")}${cells}</div></div>
+ <h2>${CAL.sel.split("-").reverse().join(".")}</h2>`+(sel.length?`<div class="stats">${sb("შეკვეთა",sel.length)}${sb("გამომუშავება",L(sum(sel,o=>o.cp||0)))}${sb("ქეში",L(sum(sel,coll)))}</div><div class="grp">${sel.slice().sort((a,b)=>dd(a)-dd(b)).map(o=>`<div class="li"><div class="top"><b style="font-weight:500">${esc(o.ad)}</b><span class="amt">+${L(o.cp||0)}</span></div><div class="mu">${tmT(dd(o))} · ${esc(Pt(o.pid).n)} · ${o.a>0?"COD "+L(o.a):"გადახდილია"}</div></div>`).join("")}</div>`:`<div class="card mu">ამ დღეს ჩაბარებული ორდერი არ არის</div>`)}
+/* Google Maps: ძებნა თბილისზე და მის შემოგარენზე მიბმული */
+const mapUrl=o=>`https://www.google.com/maps/search/${encodeURIComponent((o.ad||"")+", თბილისი, საქართველო")}/@41.7151,44.8271,${/შემოგარენ/.test(o.z||"")?10:12}z`;
+/* დადასტურების ფანჯარა: ქეშიანი ორდერი ჩაიხურება მხოლოდ მაშინ, როცა კურიერი ქეშის აღებას დაადასტურებს */
+/* დარეკვა: ბმული იხსნება ზედა დონეზე; თუ ტელეფონი ზარს არ იწყებს, ჩნდება ნომრის ფანჯარა (მხოლოდ სანამ ზარი ერთხელ მაინც არ იმუშავებს) */
+let CALL=null;
+const LSg=k=>{try{return localStorage.getItem(k)}catch(e){return null}},LSs=(k,v)=>{try{localStorage.setItem(k,v)}catch(e){}};
+function callSeen(){if(CALL&&Date.now()-CALL.t<30000){CALL.ok=1;LSs("dl_call_ok","1")}}
+try{document.addEventListener("visibilitychange",()=>{if(document.hidden)callSeen()});window.addEventListener("pagehide",callSeen);window.addEventListener("blur",callSeen)}catch(e){}
+function callTap(id){CALL={id,ok:0,t:Date.now()};if(LSg("dl_call_ok"))return;setTimeout(()=>{if(CALL&&!CALL.ok&&!U.sh){U.sh={t:"n",id};R()}},2500)}
+function copyNum(n){const done=()=>toast("ნომერი დაკოპირდა");try{navigator.clipboard.writeText(n).then(done).catch(()=>cp2(n,done))}catch(e){cp2(n,done)}}
+function cp2(n,done){try{const t=document.createElement("textarea");t.value=n;document.body.appendChild(t);t.select();document.execCommand("copy");t.remove();done()}catch(e){toast("ნომერი: "+n)}}
+function dv(i){const o=S.o[i];if(coll(o)>0){U.sh={t:"c",i};R()}else setS(i,3)}
+function rt(i){U.sh={t:"r",i};U.rs="";R()}
+function dl(i){U.sh={t:"d",i};R()}
+const REASONS=["არ პასუხობს","მისამართი არასწორია","მიმღებმა უარი თქვა","მიმღები ადგილზე არ არის","სხვა"];
+function pickR(b){U.rs=b.textContent.trim();b.parentNode.querySelectorAll("button").forEach(x=>x.className="g");b.className="on"}
+function shRet(){const s=U.sh,o=S.o[s.i],t=($("#rtx").value||"").trim(),r=U.rs||"";
+ if(!r&&!t){toast("მიუთითე, რატომ ვერ ჩაბარდა");return}if(r==="სხვა"&&!t){toast("ჩაწერე მიზეზი");return}
+ const txt=[r==="სხვა"?"":r,t].filter(Boolean).join(": ");o.rs=txt;hist(o,"მიზეზი: "+txt);note("a",`#${o.id} ვერ ჩაბარდა: ${txt}`);U.sh=null;setS(s.i,5)}
+function delOrder(i){const o=S.o[i];if(!o)return;const id=o.id,cid=o.cid;S.o.splice(i,1);Object.keys(S.ord||{}).forEach(k=>S.ord[k]=S.ord[k].filter(x=>x!==id));delete EX[id];if(ED===id)ED=0;if(cid)note(cid,`ორდერი #${id} გაუქმდა`);save();R();toast(`ორდერი #${id} წაიშალა`)}
+function shNo(){const t=U.sh&&U.sh.t;U.sh=null;R();if(t==="c")toast("ორდერი ღიაა, სანამ ქეშს არ აიღებ")}
+function shYes(){const s=U.sh;U.sh=null;if(s.t==="d")delOrder(s.i);else setS(s.i,3)}
+function sheetHTML(){const s=U.sh;if(!s)return"";
+ if(s.t==="n"){const o=S.o.find(x=>x.id===s.id);if(!o||!o.ph)return"";const n=o.ph.replace(/[^\d+]/g,"");
+  return`<div class="ov" onclick="shNo()"><div class="sheet" onclick="event.stopPropagation()"><div class="grab"></div><div class="mu">#${o.id} · ${esc(o.cl)}</div><h3>ზარი ვერ დაიწყო?</h3><div class="mu" style="margin:6px 0 10px;line-height:1.5">თუ ტელეფონმა დარეკვა ავტომატურად არ გახსნა, დააჭირე ქვემოთ ან დააკოპირე ნომერი</div><div class="amtbig" style="font-size:34px;color:var(--tx);-webkit-user-select:text;user-select:text">${esc(o.ph)}</div><a class="cb" href="tel:${n}" target="_top" rel="noopener" style="min-height:52px;margin-bottom:10px;background:var(--pri);color:#0a0a0b;display:flex;align-items:center;justify-content:center;border-radius:14px;font-weight:600">დარეკვა</a><button class="big g" onclick="copyNum('${n}')">ნომრის კოპირება</button><button class="big g" style="margin-top:10px" onclick="shNo()">დახურვა</button></div></div>`}
+ const o=S.o[s.i];if(!o)return"";
+ if(s.t==="c")return`<div class="ov" onclick="shNo()"><div class="sheet" onclick="event.stopPropagation()"><div class="grab"></div><div class="mu">#${o.id} · ${esc(o.cl)}</div><h3>ქეში გაქვს ასაღები</h3><div class="amtbig">${L(coll(o))}</div><div class="mu" style="margin-bottom:20px;line-height:1.5">${o.fp==="მიმღები"&&o.f?`COD ${L(o.a)} + მიწოდება ${L(o.f)}<br>`:""}აიღე ეს თანხა მიმღებისგან და მხოლოდ შემდეგ დაადასტურე</div><button class="big ok" onclick="shYes()">დიახ, ქეში აღებულია</button><button class="big g" style="margin-top:10px" onclick="shNo()">არა, ჯერ არ აღებულა</button></div></div>`;
+ if(s.t==="d")return`<div class="ov" onclick="shNo()"><div class="sheet" onclick="event.stopPropagation()"><div class="grab"></div><div class="mu">#${o.id} · ${esc(o.cl)}</div><h3>ორდერის წაშლა</h3><div class="mu" style="margin:8px 0 20px;line-height:1.55">ორდერის ყველა ინფორმაცია სრულად წაიშლება და ვერ აღდგება.${o.st===3?"<br>ორდერი ჩაბარებულია: წაშლისას ფინანსებიდანაც ამოიშლება.":""}</div><button class="big bad" onclick="shYes()">დიახ, სრულად წაშალე</button><button class="big g" style="margin-top:10px" onclick="shNo()">გაუქმება</button></div></div>`;
+ return`<div class="ov" onclick="shNo()"><div class="sheet" onclick="event.stopPropagation()"><div class="grab"></div><div class="mu">#${o.id} · ${esc(o.cl)}</div><h3>რატომ ვერ ჩაბარდა?</h3><div class="rs">${REASONS.map(r=>`<button class="${U.rs===r?"on":"g"}" onclick="pickR(this)">${r}</button>`).join("")}</div><textarea id="rtx" placeholder="დამატებითი კომენტარი"></textarea><button class="big bad" onclick="shRet()">დადასტურება</button><button class="big g" style="margin-top:10px" onclick="shNo()">გაუქმება</button></div></div>`}
+let DR=null;
+function enterJig(){const b=$("#clist"),j=$("#jbar");if(b)b.classList.add("jig");if(j)j.style.display="block";try{navigator.vibrate&&navigator.vibrate(15)}catch(e){}}
+function endJig(){const b=$("#clist"),j=$("#jbar");if(b)b.classList.remove("jig");if(j)j.style.display="none"}
+function dragInit(box){let timer=null,sx=0,sy=0,card=null;
+ const start=e=>{DR={el:card,y0:e.clientY,s0:scrollY};card.classList.add("drag");try{card.setPointerCapture(e.pointerId)}catch(x){}};
+ box.addEventListener("pointerdown",e=>{if(e.target.closest("button,a,select,input"))return;card=e.target.closest(".card[data-act='1']");if(!card)return;sx=e.clientX;sy=e.clientY;
+  if(box.classList.contains("jig"))start(e);else timer=setTimeout(()=>{timer=null;enterJig();start(e)},450)});
+ box.addEventListener("pointermove",e=>{if(timer&&Math.hypot(e.clientX-sx,e.clientY-sy)>8){clearTimeout(timer);timer=null}if(DR)mv(e)});
+ const up=()=>{clearTimeout(timer);timer=null;if(DR)endDrag(box)};
+ box.addEventListener("pointerup",up);box.addEventListener("pointercancel",up);
+ box.addEventListener("touchmove",e=>{if(DR)e.preventDefault()},{passive:false});
+ box.addEventListener("contextmenu",e=>e.preventDefault())}
+function mv(e){const c=DR.el;if(e.clientY<90)scrollBy(0,-14);else if(e.clientY>innerHeight-130)scrollBy(0,14);
+ const tr=()=>{c.style.transform=`translateY(${e.clientY-DR.y0+scrollY-DR.s0}px) scale(1.02)`};tr();
+ const sw=(sib,before)=>{const vt=c.getBoundingClientRect().top;c.style.transform="none";const p=c.parentNode;p.insertBefore(c,before?sib:sib.nextSibling);
+  const nt=c.getBoundingClientRect().top;DR.y0=e.clientY-(vt-nt);DR.s0=scrollY;tr()};
+ const r=c.getBoundingClientRect(),mid=r.top+r.height/2,pv=c.previousElementSibling,nx=c.nextElementSibling;
+ if(pv&&pv.dataset.act==="1"){const q=pv.getBoundingClientRect();if(mid<q.top+q.height/2){sw(pv,1);return}}
+ if(nx&&nx.dataset.act==="1"){const q=nx.getBoundingClientRect();if(mid>q.top+q.height/2)sw(nx,0)}}
+function endDrag(box){const c=DR.el;c.classList.remove("drag");c.style.transform="";DR=null;
+ const ids=[...box.querySelectorAll(".card[data-act='1']")].map(x=>+x.dataset.id);S.ord=S.ord||{};S.ord[me.id]=ids;save();
+ box.querySelectorAll(".card[data-act='1'] .pos").forEach((p,k)=>p.textContent=k+1)}
+function initDrag(){const b=$("#clist");if(b&&b.addEventListener)dragInit(b)}
+const hd=(t,b)=>`<div class="hdr"><h1>${t}</h1><div class="hb">${b}</div></div>`,ib=(ic,fn)=>`<button class="ib" onclick="${fn}">${ic}</button>`,sb=(l,v)=>`<div><span class="mu">${l}</span><b>${v}</b></div>`;
+function per(o){const t=today(),m=t.slice(0,7),mm=F.from&&F.to&&F.from===m+"-01"&&F.to.slice(0,7)===m,b=(on,fn,x)=>`<button class="${on?"on":"g"}" onclick="${fn}">${x}</button>`;
+ return`<div class="chips">${b(F.from===t&&F.to===t,"fq('d')","დღეს")}${b(mm,"fq('m')","ამ თვე")}${b(!F.from&&!F.to,"fq('')","ყველა დრო")}${b(U.flt,"tg('flt')","სხვა პერიოდი")}</div>${U.flt?fbar(o):""}`}
+function R(){
+ if(!me){$("#app").innerHTML=`<div style="padding-top:10vh;text-align:center"><div class="logo">${sv("truck",36)}</div><h1 style="margin:8px 0 24px">მიწოდება</h1></div><div class="card"><div class="row"><select id="lu"><option value="a">ადმინი</option>${S.c.filter(c=>c.on).map(c=>`<option value="${c.id}">${esc(c.n)}</option>`).join("")}</select></div><div class="row"><input id="lp" type="password" inputmode="numeric" maxlength="4" placeholder="PIN"></div><div class="row"><button class="big" onclick="login()">შესვლა</button></div></div><div class="mu" style="text-align:center">დემო: ადმინი 0000 · გიორგი 1111 · ნიკა 2222</div>`;return}
+ const adm=me.r==="a",notes=S.n.filter(n=>n.to===myKey()).slice(0,8),bell=ib(sv("bell",20),"tg('np')"),gear=adm?ib(sv("sliders",20),"tg('stg')"):ib(sv("power",20),"out()");
+ const panels=(U.np?`<div class="card"><div class="top"><b>შეტყობინებები</b><button class="g sm" onclick="askN()">ჩართვა</button></div>${notes.length?notes.map(n=>`<div class="mu" style="margin-top:6px"><b style="color:var(--tx)">${n.t}</b> ${esc(n.m)}</div>`).join(""):`<div class="mu" style="margin-top:6px">ჯერ არაფერია</div>`}</div>`:"")+(U.stg&&adm?tariffCard()+`<div class="card"><b>პარამეტრები</b><div class="row"><input id="nap" placeholder="ადმინის ახალი PIN" maxlength="4" inputmode="numeric"><button class="g" onclick="setAp()">PIN-ის შეცვლა</button></div><div class="row"><button class="g" onclick="out()">გასვლა</button></div></div>`:"");
+ let h="";
+ if(adm){const T={o:["ორდერები",ib(sv("plus",20),"nf()")],c:["კურიერები",ib(sv("plus",20),"tg('nc')")],p:["კომპანიები",ib(sv("plus",20),"tg('np2')")],h:["ისტორია",""],f:["ფინანსები",""]};h+=hd(T[tab][0],T[tab][1]+bell+gear)+panels;
+ if(tab==="o"){const cs=S.c.map(c=>cst(c.id)),ps=S.p.map(p=>pst(p.id));
+  h+=`<div class="stats">${sb("აქტიური",S.o.filter(o=>o.st<3).length)}${sb("ქეში კურიერებთან",L(sum(cs,x=>x.cash)))}${sb("გადასახდელი",L(sum(S.o.filter(o=>o.st===3&&!o.ps),owed)))}</div>`+
+  (S.o.length?"":`<div class="card"><b>დაწყება</b><div class="mu" style="margin-top:6px;line-height:1.8">1) „კომპანიები“: დაამატე პარტნიორი<br>2) „კურიერები“: დაარეგისტრირე კურიერი<br>3) დააჭირე ＋ ახალი ორდერისთვის<br>4) კურიერი PIN-ით შედის და ორდერს „ჩაბარებულს“ ანიშნავს<br>5) „ფინანსებში“ ჩანს ყველა თანხა</div></div>`)+
+  (NF?`<div class="card"><b>ახალი ორდერი</b><div class="row"><select id="pt" onchange="refZ()">${S.p.filter(p=>p.on).map(p=>`<option value="${p.id}">${esc(p.n)} (მიწოდებას იხდის: ${p.fp})</option>`).join("")}</select></div>
+  <div class="row"><input id="cl" placeholder="მიმღები"><input id="ph" placeholder="ტელეფონი" type="tel" onchange="fillPh(this.value)"></div><div class="row"><input id="ad" placeholder="მისამართი"><select id="zn">${zOpts((S.p.find(p=>p.on)||{}).id)}</select></div>
+  <div class="row"><input id="rf" placeholder="ორდერის კოდი (არასავალდებულო)"><input id="am" type="number" placeholder="COD თანხა ₾ (0 = გადახდილია)"></div><div class="row"><button class="big" onclick="add()">დამატება</button></div></div>`:"")+
+  `<div class="row" style="margin:0 0 10px"><input type="search" placeholder="ძებნა: ტელეფონი, სახელი, კოდი, მისამართი" value="${esc(F.q)}" oninput="sq(this.value)" style="flex:1 1 180px"><button class="g" style="flex:0 0 auto" onclick="tg('flt')">ფილტრი</button></div>${U.flt?fbar(1):""}<div id="lst">${olist()}</div>`}
+ if(tab==="c"){const cs=S.c.map(c=>cst(c.id));if(!S.c.find(c=>c.id===PC))PC=S.c.length?S.c[0].id:0;
+  const pl=S.o.map((o,i)=>[o,i]).filter(([o])=>o.cid===PC&&o.st===3&&!o.set);
+  h+=(U.calc?calView(U.calc,1):"")+(U.nc?`<div class="card"><b>კურიერის რეგისტრაცია</b><div class="row"><input id="cn" placeholder="სახელი"><input id="cph" placeholder="ტელეფონი" type="tel"></div><div class="row"><input id="cpn" placeholder="PIN (4 ციფრი)" maxlength="4" inputmode="numeric"><button onclick="addC()">დამატება</button></div></div>`:"")+
+  `<button class="g" style="width:100%;margin-bottom:10px" onclick="tg('stg')">საერთო ტარიფები</button><button class="g" style="width:100%;margin-bottom:10px" onclick="tg('pco')">${U.pco?"დახურვა":"ანაზღაურების კორექტირება"}</button>`+
+  (U.pco?`<div class="card"><div class="row"><select onchange="PC=+this.value;R()">${S.c.map(c=>`<option value="${c.id}" ${c.id===PC?"selected":""}>${esc(c.n)}</option>`).join("")}</select><select id="br">${CP.map(p=>`<option value="${p}">${p} ₾</option>`).join("")}</select></div><div class="row"><button onclick="bulk()">ყველა უანაზღაურო ამანათზე</button></div>
+  <div class="mu" style="margin:8px 0">ანაზღაურება ჩაბარებისას ავტომატურად ინიშნება ტარიფით. აქ შეგიძლია ცალკეულ ამანათზე შეცვალო.</div>`+(pl.length?pl.map(([o,i])=>`<div class="top" style="margin-top:6px"><span>#${o.id} · ${esc(Pt(o.pid).n)}</span><select onchange="setCP(${i},this.value)"><option value="0">—</option>${(CP.includes(o.cp)||!o.cp?CP:[...CP,o.cp].sort((a,b)=>a-b)).map(p=>`<option value="${p}" ${p===o.cp?"selected":""}>${p} ₾</option>`).join("")}</select></div>`).join("")+`<div class="top" style="margin-top:10px"><b>ჯამი</b><b>${L(sum(pl,x=>x[0].cp||0))}</b></div>`:`<span class="mu">გასაანგარიშებელი ამანათები არ არის</span>`)+`</div>`:"")+
+  `<div class="grp">`+S.c.map((c,k)=>{const x=cs[k],o=U["c"+c.id];return`<div class="li" style="${c.on?"":"opacity:.55"}"><div class="top"><b>${esc(c.n)}</b><span class="amt">COD ${L(x.cash)}</span></div>
+  <div class="mu">გამომუშავება <b style="color:var(--ok)">${L(x.pay)}</b> · აწევს ${x.act} · ჩაბარებული ${x.n}</div><div class="row"><button class="g sm" onclick="goC(${c.id})">ორდერები</button><button class="sm" onclick="payC(${c.id})">ანგარიშსწორება</button><button class="g sm" onclick="tg('c${c.id}')">${o?"ნაკლები":"დეტალები"}</button></div>
+  ${o?`<div class="money">PIN ${c.pin}${c.ph?" · "+esc(c.ph):""}<br>მიმაგრებული ${x.n1} · COD ${x.ac} / გადახდილი ${x.ap}<br>ანაზღაურება: ${L(x.pay)}<br>${bk(x)||"COD თანხა არ აქვს"}<div class="mu" style="margin-top:8px">ანაზღაურება ამ კურიერისთვის (ცარიელი = საერთო)</div>${S.z.map(z=>`<div class="top" style="margin-top:6px"><span>${esc(z.n)}</span><input type="number" step="0.5" placeholder="${z.cp}" value="${c.t&&c.t[z.id]!=null?c.t[z.id]:""}" onchange="setT('c',${c.id},${z.id},this.value)" style="width:96px;flex:0 0 96px"></div>`).join("")}</div><div class="row"><button class="g sm" onclick="U.calc=${c.id};R();scrollTo(0,0)">კალენდარი</button><button class="g sm" onclick="tog('c',${c.id})">${c.on?"გამორთვა":"ჩართვა"}</button></div>`:""}</div>`}).join("")+`</div>`}
+ if(tab==="p"){const rows=S.p.filter(p=>F.pid===""||String(p.id)===F.pid).map(p=>[p,pst(p.id)]);
+  h+=`<button class="g" style="width:100%;margin-bottom:10px" onclick="tg('stg')">საერთო ტარიფები</button>`+per()+(U.np2?`<div class="card"><b>პარტნიორის რეგისტრაცია</b><div class="row"><input id="pn" placeholder="კომპანიის სახელი"><input id="pph" placeholder="ტელეფონი" type="tel"></div><div class="row"><select id="pfp"><option value="პარტნიორი">მიწოდებას იხდის პარტნიორი</option><option value="მიმღები">მიწოდებას იხდის მიმღები</option></select><button onclick="addP()">დამატება</button></div></div>`:"")+
+  `<div class="grp">`+rows.map(([p,x])=>{const o=U["p"+p.id];return`<div class="li" style="${p.on?"":"opacity:.55"}"><div class="top"><b>${esc(p.n)}</b><span class="amt ${x.left>=0?"":"bad"}">${x.left>=0?L(x.left):"გვმართებს "+L(-x.left)}</span></div>
+  <div class="mu">გადასახდელი · ჩაბარებული ${x.n} · COD ${L(x.c)}</div><div class="row"><button class="sm" onclick="payP(${p.id})">გადახდა</button><button class="g sm" onclick="tg('p${p.id}')">${o?"ნაკლები":"დეტალები"}</button></div>
+  ${o?`<div class="money">COD ჯამი: ${L(x.c)}<br>გამოქვითვა (მიწოდება): −${L(x.f)}<br>ნეტო: ${L(x.net)} · გადახდილი: ${L(x.paid)}<br>ჯერ კურიერებთან: ${L(x.held)}<br>მიწოდებას იხდის: ${p.fp}${p.ph?" · "+esc(p.ph):""}<div class="mu" style="margin-top:8px">ტარიფი ამ კომპანიისთვის (ცარიელი = საერთო)</div>${S.z.map(z=>`<div class="top" style="margin-top:6px"><span>${esc(z.n)}</span><input type="number" step="0.5" placeholder="${z.pp}" value="${p.t&&p.t[z.id]!=null?p.t[z.id]:""}" onchange="setT('p',${p.id},${z.id},this.value)" style="width:96px;flex:0 0 96px"></div>`).join("")}</div><div class="row"><button class="g sm" onclick="tog('p',${p.id})">${p.on?"გამორთვა":"ჩართვა"}</button></div>`:""}</div>`}).join("")+`</div><div class="mu" style="margin:0 4px">„გადახდა“ ხურავს მხოლოდ არჩეული პერიოდის ჩაბარებულ ორდერებს.</div>`}
+ if(tab==="h"){const pm=(U.hm||"p")==="p",tk=o=>pm?(o.d||0):dd(o),ent=o=>pm?o.pid:o.cid,hm=t=>new Date(t).toLocaleTimeString("ka",{hour:"2-digit",minute:"2-digit"}),days={},
+  L0=S.o.filter(o=>(F.cid===""||String(o.cid)===F.cid)&&(F.pid===""||String(o.pid)===F.pid)&&(F.ty===""||(F.ty==="c"?o.a>0:o.a===0))&&(pm?inR(o.d||0):o.st===3&&inR(dd(o))));
+  L0.forEach(o=>{const k=bizDay(tk(o));(days[k]=days[k]||[]).push(o)});
+  const dk=Object.keys(days).sort().reverse(),nc=L0.filter(o=>o.a>0).length;
+  h+=`<div class="seg"><button class="${pm?"on":"g"}" onclick="U.hm='p';R()">კომპანიები</button><button class="${pm?"g":"on"}" onclick="U.hm='c';R()">კურიერები</button></div>`+per(1)+
+  (pm?`<div class="hero"><span class="mu">გამოგვატანეს ორდერი</span><b>${L0.length}</b><span class="mu">COD ${nc} · გადახდილი ${L0.length-nc}</span></div><div class="stats">${sb("COD ჯამი",L(sum(L0,o=>o.a)))}${sb("ჩაბარებული",L0.filter(o=>o.st===3).length)}${sb("დაბრუნებული",L0.filter(o=>o.st===5).length)}</div>`
+  :`<div class="hero"><span class="mu">შეგროვილი ქეში</span><b>${L(sum(L0,coll))}</b><span class="mu">COD ${nc} · გადახდილი ${L0.length-nc}</span></div><div class="stats">${sb("ჩაბარებული",L0.length)}${sb("გამომუშავება",L(sum(L0,o=>o.cp||0)))}${sb("მოგება",L(sum(L0,o=>o.f-(o.cp||0))))}</div>`)+
+  (dk.length?dk.map(k=>{const x=days[k],ids=[...new Set(x.map(ent))];
+   return`<h2>${k.split("-").reverse().join(".")} · ${x.length} ორდერი · ${pm?"COD "+L(sum(x,o=>o.a)):"ქეში "+L(sum(x,coll))+" · გამომუშავება "+L(sum(x,o=>o.cp||0))}</h2><div class="grp">`+ids.map(id=>{const y=x.filter(o=>ent(o)===id),key="h"+k+"_"+id,open=U[key],ny=y.filter(o=>o.a>0).length;
+    return`<div class="li"><div class="item" onclick="tg('${key}')"><div class="top"><b>${esc(pm?Pt(id).n:C(id).n)}</b><span class="amt">${pm?L(sum(y,o=>o.a)):L(sum(y,coll))}</span></div>
+    <div class="mu">${y.length} ორდერი · COD ${ny} / გადახდილი ${y.length-ny}${pm?` · ჩაბარებული ${y.filter(o=>o.st===3).length} · დაბრუნებული ${y.filter(o=>o.st===5).length} · აქტიური ${y.filter(o=>o.st<3).length}`:` · გამომუშავება <b style="color:var(--ok)">${L(sum(y,o=>o.cp||0))}</b>`}</div><div class="top"><span></span><span class="chev ${open?"o":""}">›</span></div></div>`+
+    (open?y.slice().sort((p,q)=>tk(p)-tk(q)).map(o=>`<div class="money" style="margin:6px 0">${hm(tk(o))} · #${o.id}${o.ref?" · "+esc(o.ref):""}<br>${esc(o.ad)}${o.z?" ("+esc(o.z)+")":""}<br>${pm?`${o.a>0?"COD "+L(o.a):"გადახდილია"} · ${ST[o.st]}${o.st===5&&o.rs?" ("+esc(o.rs)+")":""}${o.cid?" · "+esc(C(o.cid).n):""}`:`${esc(Pt(o.pid).n)} · ${o.a>0?"COD "+L(o.a):"გადახდილია"} · აკრეფა ${L(coll(o))} · გამომუშავება ${L(o.cp||0)}`}</div>`).join(""):"")+`</div>`}).join("")+`</div>`}).join(""):`<div class="card mu">ამ პერიოდში მონაცემები არ არის</div>`)}
+ if(tab==="f"){const d=S.o.filter(o=>o.st===3&&inR(dd(o))&&(F.pid===""||String(o.pid)===F.pid)),fee=sum(d,o=>o.f),cps=sum(d,o=>o.cp||0),cs=S.c.map(c=>cst(c.id)),days={};
+  d.forEach(o=>{const k=bizDay(dd(o));(days[k]=days[k]||[]).push(o)});
+  const rc=S.c.map(c=>[c,d.filter(o=>o.cid===c.id)]).filter(x=>x[1].length),rp=S.p.filter(p=>F.pid===""||String(p.id)===F.pid).map(p=>[p,pst(p.id)]),dk=Object.keys(days).sort().reverse().slice(0,31),nc=d.filter(o=>o.a>0).length;
+  h+=per()+`<div class="hero"><span class="mu">წმინდა მოგება</span><b>${L(fee-cps)}</b><span class="mu">შემოსავალი ${L(fee)} − ანაზღაურება ${L(cps)}</span></div>
+  <div class="stats">${sb("ჩაბარებული",d.length)}${sb("COD ჯამი",L(sum(d,o=>o.a)))}${sb("COD / გადახდ.",nc+" / "+(d.length-nc))}</div>
+  <h2>ახლა</h2><div class="stats">${sb("ქეში კურიერებთან",L(sum(cs,x=>x.cash)))}${sb("კურიერებს ვალი",L(sum(cs,x=>x.pay)))}${sb("გადასახდელი",L(sum(S.o.filter(o=>o.st===3&&!o.ps),owed)))}</div>`+
+  (d.some(o=>!o.cp)?`<div class="card" style="background:rgba(255,159,10,.15)">${d.filter(o=>!o.cp).length} ამანათზე კურიერის ანაზღაურება დაყენებული არ არის (კურიერები → ანაზღაურების კორექტირება)</div>`:"")+
+  `<button class="g" style="width:100%;margin-bottom:10px" onclick="tg('fd')">${U.fd?"დეტალური ანგარიშის დამალვა":"დეტალური ანგარიში"}</button>`+
+  (U.fd?`<h2>დღეების მიხედვით (დღე იწყება 01:00-ზე)</h2><div class="card tw"><table><tr><th>დღე</th><th>ჩაბარ.</th><th>COD</th><th>შემოსავალი</th><th>ანაზღაურება</th><th>მოგება</th></tr>`+(dk.length?dk.map(k=>{const x=days[k],f=sum(x,o=>o.f),c=sum(x,o=>o.cp||0);return`<tr><td>${k.split("-").reverse().join(".")}</td><td>${x.length}</td><td>${L(sum(x,o=>o.a))}</td><td>${L(f)}</td><td>${L(c)}</td><td><b>${L(f-c)}</b></td></tr>`}).join(""):`<tr><td class="mu" colspan="6">მონაცემები არ არის</td></tr>`)+`</table></div>
+  <h2>კომპანიების მიხედვით</h2><div class="card tw"><table><tr><th>კომპანია</th><th>ჩაბარ.</th><th>COD</th><th>გამოქვითვა</th><th>ნეტო</th><th>გადახდილი</th><th>დარჩენილი</th></tr>`+rp.map(([p,x])=>`<tr><td>${esc(p.n)}</td><td>${x.n}</td><td>${L(x.c)}</td><td>−${L(x.f)}</td><td>${L(x.net)}</td><td>${L(x.paid)}</td><td><b>${x.left>=0?L(x.left):"გვმართებს "+L(-x.left)}</b></td></tr>`).join("")+`</table></div>
+  <h2>კურიერების მიხედვით</h2><div class="card tw"><table><tr><th>კურიერი</th><th>ჩაბარ.</th><th>აკრეფილი</th><th>ანაზღაურება</th><th>მოგება</th><th>ჯერ ჩაუბარებელი</th></tr>`+(rc.length?rc.map(([c,x])=>`<tr><td>${esc(c.n)}</td><td>${x.length}</td><td>${L(sum(x,coll))}</td><td>${L(sum(x,o=>o.cp||0))}</td><td>${L(sum(x,o=>o.f-(o.cp||0)))}</td><td>${L(sum(x.filter(o=>!o.set),coll))}</td></tr>`).join(""):`<tr><td class="mu" colspan="6">მონაცემები არ არის</td></tr>`)+`</table></div>
+  <h2>ჩაბარებული ორდერების ჟურნალი</h2><div class="card tw"><table><tr><th>დრო</th><th>კოდი</th><th>კომპანია</th><th>კურიერი</th><th>COD</th><th>მიწოდება</th><th>აკრეფილი</th><th>პარტნიორს</th><th>ანაზღაურება</th></tr>${d.slice().sort((x,y)=>dd(y)-dd(x)).slice(0,100).map(o=>`<tr><td>${tm(dd(o))}</td><td>#${o.id}${o.ref?" · "+esc(o.ref):""}</td><td>${esc(Pt(o.pid).n)}</td><td>${esc(C(o.cid).n)}</td><td>${L(o.a)}</td><td>${L(o.f)}</td><td>${L(coll(o))}</td><td>${L(owed(o))}</td><td>${L(o.cp||0)}</td></tr>`).join("")||`<tr><td class="mu" colspan="9">მონაცემები არ არის</td></tr>`}</table></div>
+  <div class="card mu" style="line-height:1.7"><b style="color:var(--tx)">როგორ ითვლება?</b><br>კურიერი აკრეფს = COD (+ მიწოდება, თუ მიმღები იხდის) და სრულად აბარებს კომპანიაში<br>პარტნიორს ეკუთვნის = COD − მიწოდება (თუ პარტნიორი იხდის)<br>ჩვენი შემოსავალი = პარტნიორის ტარიფი ამანათზე (მაგ. ქალაქი 6 ₾, შემოგარენი 8 ₾)<br>გამომუშავება = ამანათების რაოდენობა × კურიერის ტარიფი (მაგ. 3 ამანათი × 5 ₾ = 15 ₾). ის COD-დან არ აკლდება და ცალკე გადაეცემა კურიერს<br>მოგება = პარტნიორის ტარიფი − კურიერის ანაზღაურება<br>ითვლება მხოლოდ ის ორდერი, რომელსაც კურიერი ჩაბარებულად მონიშნავს. დღე იწყება 01:00-ზე, ჩაუბარებელი ორდერები გადადის შემდეგ დღეზე.</div>`:"")}
+ h+=`<nav class="bn">${[["o","package","ორდერები"],["c","truck","კურიერები"],["p","briefcase","კომპანიები"],["h","clock","ისტორია"],["f","trend","ფინანსები"]].map(t=>`<button class="${tab===t[0]?"on":""}" onclick="tb('${t[0]}')"><i>${sv(t[1],24)}</i>${t[2]}</button>`).join("")}</nav>`}
+ else{const x=cst(me.id),mine=S.o.map((o,i)=>[o,i]).filter(y=>y[0].cid===me.id&&(y[0].st<3||bizDay(y[0].dd||y[0].d||0)===today())),rk=(S.ord&&S.ord[me.id])||[],rank=y=>{const k=rk.indexOf(y[0].id);return k<0?1e6+y[0].id:k},A=mine.filter(y=>y[0].st<3).sort((p,q)=>rank(p)-rank(q)),B=mine.filter(y=>y[0].st>=3).reverse();
+  h+=hd(esc(C(me.id).n),bell+gear)+panels+segE()+(U.cv==="e"?calView(me.id):`<div class="hero"><span class="mu">ჩასაბარებელი COD</span><b>${L(x.cash)}</b><span class="mu">ამ თანხას სრულად აბარებ კომპანიაში</span></div>
+  <div class="stats">${sb("გამომუშავება",L(x.pay))}${sb("აქტიური",x.act)}${sb("დღეს ჩაბარებული",S.o.filter(o=>o.cid===me.id&&o.st===3&&bizDay(dd(o))===today()).length)}</div>
+  <button class="g" style="width:100%;margin-bottom:10px" onclick="tg('cb')">${U.cb?"დამალვა":"ვისი თანხა მაქვს"}</button>`+
+  (U.cb?`<div class="card">${Object.keys(x.by).map(k=>`<div class="top"><span>${esc(Pt(+k).n)}</span><b>${L(x.by[k])}</b></div>`).join("")||`<span class="mu">COD თანხა არ მაქვს</span>`}${x.fee?`<div class="top"><span class="mu">მიწოდების საფასური (ჩვენი)</span><b>${L(x.fee)}</b></div>`:""}</div>`:"")+
+  (mine.length?`<div id="clist">${A.map((y,k)=>card(y[0],y[1],0,k+1)).join("")}${B.map(y=>card(y[0],y[1],0)).join("")}</div>`+(A.length>1?`<div class="mu" style="text-align:center">რიგითობის შესაცვლელად ორდერზე დიდხანს დააჭირე</div>`:"")+`<div id="jbar" style="display:none;position:fixed;left:16px;right:16px;bottom:calc(env(safe-area-inset-bottom,0px) + 16px);z-index:6"><button class="big" style="width:100%" onclick="endJig()">მზადაა</button></div>`:`<div class="card mu">ორდერები არ არის</div>`))}
+ h+=sheetHTML();$("#app").innerHTML=h;initDrag()}
+checkDay();R();setInterval(()=>{if(S.day!==today()){checkDay();R()}},60000);
+</script></body></html>
